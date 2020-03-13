@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 MAINTAINER Kyle Manna <kyle@kylemanna.com>
 
 ARG USER_ID
@@ -9,36 +9,39 @@ ENV HOME /bitcoin
 # add user with specified (or default) user/group ids
 ENV USER_ID ${USER_ID:-1000}
 ENV GROUP_ID ${GROUP_ID:-1000}
+# you may pick VERSION(#L2) and SHASUM(#L45) from https://github.com/bitcoin-core/packaging/blob/master/snap/snapcraft.yaml
+# check VERSION matches SHASUM
+ENV VERSION 0.19.1
+ENV SHASUM e91d9786cda5194e5aa0f1e064cc2c210698917773911207e56ea186ce188f93
+ENV ARCH x86_64-linux-gnu
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -g ${GROUP_ID} bitcoin \
 	&& useradd -u ${USER_ID} -g bitcoin -s /bin/bash -m -d /bitcoin bitcoin
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C70EF1F0305A1ADB9986DBD8D46F45428842CE5E && \
-    echo "deb http://ppa.launchpad.net/bitcoin/bitcoin/ubuntu xenial main" > /etc/apt/sources.list.d/bitcoin.list
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		bitcoind \
-	&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # grab gosu for easy step-down from root
-ENV GOSU_VERSION 1.7
-RUN set -x \
-	&& apt-get update && apt-get install -y --no-install-recommends \
-		ca-certificates \
-		wget \
-	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
-	&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
-	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
-	&& chmod +x /usr/local/bin/gosu \
-	&& gosu nobody true \
-	&& apt-get purge -y \
-		ca-certificates \
-		wget \
-	&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN set -x && apt-get update && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      wget \
+      gosu && \
+    cd /tmp && \
+    wget https://bitcoincore.org/bin/bitcoin-core-${VERSION}/SHA256SUMS.asc && \
+    wget https://bitcoincore.org/bin/bitcoin-core-${VERSION}/bitcoin-${VERSION}.tar.gz && \
+    wget https://bitcoincore.org/bin/bitcoin-core-${VERSION}/bitcoin-${VERSION}-${ARCH}.tar.gz && \
+    echo "$SHASUM  SHA256SUMS.asc" | sha256sum --check && \
+    sha256sum --ignore-missing --check SHA256SUMS.asc && \
+    tar -xf bitcoin-${VERSION}-${ARCH}.tar.gz && \
+    tar -xf bitcoin-${VERSION}.tar.gz && \
+    echo "Running tests ..." && \
+    bitcoin-${VERSION}/bin/test_bitcoin && \
+    install -m 0755 -D -t /usr/local/bin bitcoin-${VERSION}/bin/bitcoind && \
+    install -m 0755 -D -t /usr/local/bin bitcoin-${VERSION}/bin/bitcoin-cli && \
+    cd / && \
+    apt-get purge -y \
+    		ca-certificates \
+    		wget && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD ./bin /usr/local/bin
 
