@@ -1,1 +1,4 @@
 /official-images
+
+*.env
+.idea

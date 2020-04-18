@@ -5,7 +5,7 @@ services:
     image: bartoszmilczarek/bitcoind
     environment:
       DISABLEWALLET: 0
-      PRINTTOCONSOLE: 0
+      PRINTTOCONSOLE: 1
       RPCUSER: bitcoinrpc
       RPCPASSWORD: bitcoinrpc
       RPCBIND: 127.0.0.1
@@ -14,4 +14,4 @@ services:
       - "8333:8333"
       - "8332:8332"
     volumes:
-      - /Volumes/home/bitcoin-dev/bitcoind-bionic-node-02:/bitcoin
+      - ${BITCOIND_VOLUMES:-/tmp/bitcoind-data}:/bitcoin
