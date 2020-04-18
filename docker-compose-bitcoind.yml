@@ -12,6 +12,6 @@ services:
       SERVER: 1
     ports:
       - "8333:8333"
-      - "8332:8332"
+      - "127.0.0.1:8332:8332"
     volumes:
       - ${BITCOIND_VOLUMES:-/tmp/bitcoind-data}:/bitcoin
