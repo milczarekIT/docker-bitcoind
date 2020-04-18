@@ -14,7 +14,7 @@
 
 *Note:* This container will be run in the same way as the bitcoind node, but will not connect to already running containers or processes.
 
-    docker run -v bitcoind-data:/bitcoin --rm -it kylemanna/bitcoind bash -l
+    docker run -v bitcoind-data:/bitcoin --rm -it bartoszmilczarek/bitcoind bash -l
 
 You can also attach bash into running container to debug running bitcoind
 

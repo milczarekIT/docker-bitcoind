@@ -1,5 +1,5 @@
 FROM ubuntu:bionic
-MAINTAINER Kyle Manna <kyle@kylemanna.com>
+MAINTAINER Bartosz Milczarek <bartosz@milczarek.it>
 
 ARG USER_ID
 ARG GROUP_ID

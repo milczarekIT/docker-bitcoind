@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  bitcoind-node:
+    container_name: bitcoind-node
+    image: bartoszmilczarek/bitcoind
+    environment:
+      DISABLEWALLET: 0
+      PRINTTOCONSOLE: 0
+      RPCUSER: bitcoinrpc
+      RPCPASSWORD: bitcoinrpc
+      RPCBIND: 127.0.0.1
+      SERVER: 1
+    ports:
+      - "8333:8333"
+      - "8332:8332"
+    volumes:
+      - /Volumes/home/bitcoin-dev/bitcoind-bionic-node-02:/bitcoin
