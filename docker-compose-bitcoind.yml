@@ -8,11 +8,13 @@ services:
       PRINTTOCONSOLE: 1
       RPCUSER: ${RPCUSER:-bitcoinrpc}
       RPCPASSWORD: ${RPCPASSWORD:-bitcoinrpc}
-      RPCBIND: 127.0.0.1
+      RPCBIND: ${RPCBIND:-127.0.0.1}
       SERVER: 1
       TXINDEX: 1
+      TESTNET: 0
+      REGTEST: 0
     ports:
       - "8333:8333"
-      - "127.0.0.1:8332:8332"
+      - "${RPCBIND}:8332:8332"
     volumes:
       - ${BITCOIND_VOLUMES:-/tmp/bitcoind-data}:/bitcoin

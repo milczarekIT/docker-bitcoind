@@ -19,6 +19,8 @@ rpcpassword=${RPCPASSWORD:-`dd if=/dev/urandom bs=33 count=1 2>/dev/null | base6
 rpcbind=${RPCBIND:-127.0.0.1}
 rpcallowip=${RPCALLOWIP:-0.0.0.0/0}
 txindex=${TXINDEX:-0}
+testnet=${TESTNET:-0}
+regtest=${REGTEST:-0}
 EOF
 
 fi
