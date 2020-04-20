@@ -2,7 +2,7 @@ version: "3.3"
 services:
   bitcoind-node:
     container_name: ${CONTAINER_NAME:-bitcoind-node}
-    image: bartoszmilczarek/bitcoind:${IMAGE_VERSION:-latest}
+    image: bartoszmilczarek/bitcoind:0.17.1
     environment:
       DISABLEWALLET: 0
       PRINTTOCONSOLE: 1
@@ -17,4 +17,4 @@ services:
       - "8333:8333"
       - "${RPCBIND}:8332:8332"
     volumes:
-      - ${BITCOIND_VOLUMES:-/tmp/bitcoind-data}:/bitcoin
+      - ${BITCOIND_VOLUMES:-/tmp/bitcoind-data}/${CONTAINER_NAME:-bitcoind-node}:/bitcoin
