@@ -18,6 +18,7 @@ rpcuser=${RPCUSER:-bitcoinrpc}
 rpcpassword=${RPCPASSWORD:-`dd if=/dev/urandom bs=33 count=1 2>/dev/null | base64`}
 rpcbind=${RPCBIND:-127.0.0.1}
 rpcallowip=${RPCALLOWIP:-0.0.0.0/0}
+txindex=${TXINDEX:-0}
 EOF
 
 fi

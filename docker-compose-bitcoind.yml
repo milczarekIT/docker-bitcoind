@@ -6,10 +6,11 @@ services:
     environment:
       DISABLEWALLET: 0
       PRINTTOCONSOLE: 1
-      RPCUSER: bitcoinrpc
-      RPCPASSWORD: bitcoinrpc
+      RPCUSER: ${RPCUSER:-bitcoinrpc}
+      RPCPASSWORD: ${RPCPASSWORD:-bitcoinrpc}
       RPCBIND: 127.0.0.1
       SERVER: 1
+      TXINDEX: 1
     ports:
       - "8333:8333"
       - "127.0.0.1:8332:8332"
