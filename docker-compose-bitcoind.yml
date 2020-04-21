@@ -2,7 +2,7 @@ version: "3.3"
 services:
   bitcoind-node:
     container_name: ${CONTAINER_NAME:-bitcoind-node}
-    image: bartoszmilczarek/bitcoind:0.17.1
+    image: bartoszmilczarek/bitcoind:0.19.1
     environment:
       DISABLEWALLET: 0
       PRINTTOCONSOLE: 1
